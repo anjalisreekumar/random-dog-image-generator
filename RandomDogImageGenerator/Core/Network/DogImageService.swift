@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 class DogImageService {
+    let imageHandler = ImageCacheManager()
     func fetchRandomDogImage(completion: @escaping (Result<UIImage, NetworkError>) -> Void) {
         
         guard NetworkConnectivity.shared.isConnected else {
@@ -47,6 +48,9 @@ class DogImageService {
                    completion(.failure(.decodingFailed))
                    return
                }
+               
+             let message = self.imageHandler.saveImageToCache(image, for: urlString)
+               print("Image status is \(String(describing: message))")
                
                completion(.success(image))
            }
