@@ -10,10 +10,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Home View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="RandomDogImageGenerator" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="HomeViewController" customModule="RandomDogImageGenerator" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -34,6 +34,9 @@
                                 <buttonConfiguration key="configuration" style="filled" title="Generate Dogs!" cornerStyle="capsule">
                                     <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
                                 </buttonConfiguration>
+                                <connections>
+                                    <action selector="didTapGenerateButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="bG9-nr-mWp"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PcV-0f-R7b">
                                 <rect key="frame" x="48" y="379" width="224" height="25"/>
@@ -45,6 +48,9 @@
                                 <buttonConfiguration key="configuration" style="filled" title="My Recently Generated Dogs" cornerStyle="capsule">
                                     <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
                                 </buttonConfiguration>
+                                <connections>
+                                    <action selector="didTapRecentButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="e4x-Ha-nM3"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -61,15 +67,20 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="IU9-4o-KqM"/>
+                    <connections>
+                        <outlet property="generateButton" destination="DrB-ru-2Q8" id="JIH-jc-SXv"/>
+                        <outlet property="recentButton" destination="PcV-0f-R7b" id="4ep-Cd-RNw"/>
+                        <outlet property="titleLabel" destination="UW3-vn-BvY" id="TAv-tw-RkB"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1027.5" y="3.1690140845070425"/>
         </scene>
-        <!--View Controller-->
+        <!--Generate Image View Controller-->
         <scene sceneID="f0a-o8-13u">
             <objects>
-                <viewController id="Zbx-Yy-RWP" customClass="ViewController" customModule="RandomDogImageGenerator" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="GenerateImageViewController" id="Zbx-Yy-RWP" customClass="GenerateImageViewController" customModule="RandomDogImageGenerator" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ekd-r4-J6H">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -81,6 +92,9 @@
                                 <buttonConfiguration key="configuration" style="filled" title="Generate!" cornerStyle="capsule">
                                     <fontDescription key="titleFontDescription" type="system" pointSize="14"/>
                                 </buttonConfiguration>
+                                <connections>
+                                    <action selector="didTapGenerateButton:" destination="Zbx-Yy-RWP" eventType="touchUpInside" id="e3T-Pg-RYb"/>
+                                </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dog.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="1cW-LV-Nby">
                                 <rect key="frame" x="50" y="123.5" width="220" height="221"/>
@@ -101,6 +115,10 @@
                             <constraint firstItem="1cW-LV-Nby" firstAttribute="centerY" secondItem="ekd-r4-J6H" secondAttribute="centerY" constant="-50" id="oy3-U8-zZK"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="dogImageview" destination="1cW-LV-Nby" id="7rJ-Du-Bd6"/>
+                        <outlet property="generateButton" destination="8AM-VU-IUG" id="8VM-DG-fNy"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JdZ-a6-tRq" sceneMemberID="firstResponder"/>
             </objects>
