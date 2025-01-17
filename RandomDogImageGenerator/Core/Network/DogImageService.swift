@@ -9,7 +9,9 @@ import Foundation
 import UIKit
 
 class DogImageService {
-    let imageHandler = ImageCacheManager()
+    
+    let imageHandler = ImageCacheManager.shared
+    
     func fetchRandomDogImage(completion: @escaping (Result<UIImage, NetworkError>) -> Void) {
         
         guard NetworkConnectivity.shared.isConnected else {

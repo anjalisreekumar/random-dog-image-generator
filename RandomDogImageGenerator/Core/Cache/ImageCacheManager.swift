@@ -9,8 +9,12 @@ import Foundation
 import UIKit
 
 class ImageCacheManager {
+    static let shared = ImageCacheManager()  // Singleton instance
+
     private let imageCache = LRUCache(capacity: 20)
     
+    private init() { }
+
     // Save image to cache
     func saveImageToCache(_ image: UIImage, for key: String) -> String {
         if let _ = imageCache.get(key: key) {
