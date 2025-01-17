@@ -33,7 +33,7 @@
 		5D0F3F742D3A580900DDAA7F /* Exceptions for "RandomDogImageGenerator" folder in "RandomDogImageGenerator" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				Resources/Info.plist,
 			);
 			target = 5D0F3F4B2D3A580700DDAA7F /* RandomDogImageGenerator */;
 		};
@@ -291,7 +291,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = D8WRCDJT2L;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = RandomDogImageGenerator/Info.plist;
+				INFOPLIST_FILE = RandomDogImageGenerator/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -319,7 +319,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = D8WRCDJT2L;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = RandomDogImageGenerator/Info.plist;
+				INFOPLIST_FILE = RandomDogImageGenerator/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
