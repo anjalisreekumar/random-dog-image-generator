@@ -35,6 +35,13 @@ class DogImageService {
     }
     
        private func downloadImage(from urlString: String, completion: @escaping (Result<UIImage, NetworkError>) -> Void) {
+           
+           if let cachedImage = imageHandler.fetchImageFromCache(for: urlString) {
+               completion(.success(cachedImage))
+               return
+           }
+      
+           
            guard let url = URL(string: urlString) else {
                completion(.failure(.invalidURL))
                return
