@@ -33,8 +33,8 @@ class ImageGalleryCollectionViewCell: UICollectionViewCell {
         
     }
     
-    public func configure(with imageName: String) {
-        myImageview.image = UIImage(systemName: imageName)
+    public func configure(with image: UIImage) {
+        myImageview.image = image
     }
     
     override func prepareForReuse() {

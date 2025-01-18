@@ -23,7 +23,6 @@ class ImageGalleryViewController: UIViewController {
  
     private let viewModel = GalleryViewModel()
     
-    let imageHandler = ImageCacheManager.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,8 +30,8 @@ class ImageGalleryViewController: UIViewController {
         setupCollectionView()
         setupButton()
         setupBindings()
+        viewModel.loadImages()
         
-      print(imageHandler.fetchAllImagesFromCache())
     }
     
     override func viewDidLayoutSubviews() {
@@ -75,25 +74,20 @@ class ImageGalleryViewController: UIViewController {
     }
     
     private func setupBindings(){
-        viewModel.onClearButtonTapped = { [weak self] in
+        viewModel.onImageDataUpdate = { [weak self] in
             self?.imageCollectionView?.reloadData()
-
         }
     }
 }
 
-
-
-
-
 extension ImageGalleryViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel.imageNames.count
+        viewModel.imageArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageGalleryCollectionViewCell.identifier, for: indexPath) as! ImageGalleryCollectionViewCell
-        cell.configure(with: viewModel.imageNames[indexPath.row])
+        cell.configure(with: viewModel.imageArray[indexPath.row])
         return cell
     }
     

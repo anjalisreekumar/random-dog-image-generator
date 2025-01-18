@@ -6,38 +6,24 @@
 //
 
 import Foundation
+import UIKit
 
 class GalleryViewModel {
-    private(set) var imageNames: [String] = [
-        "house",
-        "person.circle",
-        "star",
-        "bell",
-        "heart",
-        "envelope",
-        "gear",
-        "magnifyingglass",
-        "trash",
-        "bookmark",
-        "flag",
-        "paperplane",
-        "cloud",
-        "calendar",
-        "cart",
-        "camera",
-        "folder",
-        "link",
-        "pencil",
-        "lock"
-    ]
+    let imageHandler = ImageCacheManager.shared
+    var onImageDataUpdate: (() -> Void)?
+    var onImagesLoaded: (() -> Void)?
+    var imageArray: [UIImage] = []
     
-    var onClearButtonTapped: (() -> Void)?
-    
-    
-    func clearAllImages(){
-        imageNames.removeAll()
-        onClearButtonTapped?()
+    func clearAllImages() {
+        imageHandler.clearCache()
+        imageArray = []
+        onImageDataUpdate?()
     }
     
-    
+    func loadImages() {
+        let images = imageHandler.fetchAllImagesFromCache()
+        imageArray = images
+        onImageDataUpdate?()
+    }
 }
+

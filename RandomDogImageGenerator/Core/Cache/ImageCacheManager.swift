@@ -11,7 +11,7 @@ import UIKit
 class ImageCacheManager {
     static let shared = ImageCacheManager()
     
-    private let imageCache = LRUCache(capacity: 20)
+    private let imageCache = LRUCache(capacity: 6)
     private let cacheDirectory: URL
     
     private init() {
@@ -91,7 +91,7 @@ class ImageCacheManager {
         clearAllCacheFromDisk()
         
     }
-    func clearAllCacheFromDisk() {
+    private  func clearAllCacheFromDisk() {
         let fileManager = FileManager.default
         do {
             let fileUrls = try fileManager.contentsOfDirectory(at: cacheDirectory, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
