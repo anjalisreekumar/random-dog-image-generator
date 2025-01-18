@@ -2,7 +2,7 @@
 //  RandomDogImageGeneratorTests.swift
 //  RandomDogImageGeneratorTests
 //
-//  Created by Bridge Global on 17/01/25.
+//  Created by Anjali on 17/01/25.
 //
 
 import XCTest

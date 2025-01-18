@@ -2,7 +2,7 @@
 //  GalleryViewModel.swift
 //  RandomDogImageGenerator
 //
-//  Created by Bridge Global on 18/01/25.
+//  Created by Anjali on 18/01/25.
 //
 
 import Foundation
