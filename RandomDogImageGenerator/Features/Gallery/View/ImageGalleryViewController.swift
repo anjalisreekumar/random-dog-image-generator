@@ -13,8 +13,6 @@ class ImageGalleryViewController: UIViewController {
       let button = UIButton()
         button.setTitle("Clear!", for: .normal)
         button.backgroundColor = .customColour
-        button.layer.cornerRadius = 30 / 2
-        button.layer.masksToBounds = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -26,9 +24,9 @@ class ImageGalleryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
         setupCollectionView()
         setupButton()
+        setupUI()
         setupBindings()
         viewModel.loadImages()
         
@@ -37,12 +35,12 @@ class ImageGalleryViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         imageCollectionView?.frame = CGRect(x: 0, y: 200, width: view.frame.size.width, height: 270).integral //rounding to int
+        clearButton.setCurvedCorner()
     }
     
     private func setupUI(){
         navigationItem.title = "My Recently Generated Dogs!"
-        clearButton.layer.borderWidth = 1
-        clearButton.layer.borderColor = UIColor.black.cgColor
+        clearButton.setBlackBorder()
     }
     
     private func setupCollectionView(){

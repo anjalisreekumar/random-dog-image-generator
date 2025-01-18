@@ -70,6 +70,7 @@ class GenerateImageViewController: UIViewController {
     
     @IBAction func didTapGenerateButton(_ sender: Any) {
         activityIndicator.startAnimating()
+        
         viewModel.fetchDogImage()
     }
     
