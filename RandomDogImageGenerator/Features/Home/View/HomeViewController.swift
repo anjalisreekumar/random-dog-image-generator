@@ -50,11 +50,11 @@ class HomeViewController: UIViewController {
     }
     
     @IBAction func didTapRecentButton(_ sender: Any) {
-//        //navigate to GalleryViewController
-//        if let galleryVC = storyboard?.instantiateViewController(identifier: "GenerateViewController") as? GenerateViewController {
-//            navigationController?.pushViewController(galleryVC, animated: true)
-//            
-//        }
+        //navigate to GalleryViewController
+        if let galleryVC = storyboard?.instantiateViewController(identifier: "ImageGalleryViewController") as? ImageGalleryViewController {
+            navigationController?.pushViewController(galleryVC, animated: true)
+            
+        }
         
     }
     
