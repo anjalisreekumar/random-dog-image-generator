@@ -2,7 +2,7 @@
 //  PersistanceManager.swift
 //  RandomDogImageGenerator
 //
-//  Created by Bridge Global on 18/01/25.
+//  Created by Anjali on 18/01/25.
 //
 
 import Foundation
@@ -48,13 +48,12 @@ class PersistanceManager {
     //save image to disk
     
     func saveImage(_ key: String, _ image: UIImage) {
-        let sanitizedKey = sanitizeKey(key)
         ioQueue.async {
             guard let data = image.jpegData(compressionQuality: 1.0) else {
                 print("Error: Image data is empty or invalid.")
                 return
             }
-            let fileURL = self.cacheDirectory.appendingPathComponent(sanitizedKey)
+            let fileURL = self.cacheDirectory.appendingPathComponent(key.sanitizeKey())
             do {
                 try data.write(to: fileURL)
             } catch {
@@ -67,7 +66,7 @@ class PersistanceManager {
     //load images from disk
     
     func loadImage(_ key: String) -> UIImage? {
-        let fileURL = cacheDirectory.appendingPathComponent(sanitizeKey(key))
+        let fileURL = cacheDirectory.appendingPathComponent(key.sanitizeKey())
         guard let data = try? Data(contentsOf: fileURL) else { return nil }
         return UIImage(data: data)
     }
@@ -75,7 +74,7 @@ class PersistanceManager {
     //clears single image
     
     func deleteImage(_ key: String) {
-        let fileURL = cacheDirectory.appendingPathComponent(sanitizeKey(key))
+        let fileURL = cacheDirectory.appendingPathComponent(key.sanitizeKey())
         try? fileManager.removeItem(at: fileURL)
     }
     
@@ -85,13 +84,5 @@ class PersistanceManager {
         try? fileManager.removeItem(at: cacheDirectory)
         try? fileManager.createDirectory(at: cacheDirectory, withIntermediateDirectories: true)
     }
-    
-    private func sanitizeKey(_ key: String) -> String {
-        // Replace slashes and other unsafe characters with underscores
-        return key
-            .replacingOccurrences(of: "/", with: "_")
-            .replacingOccurrences(of: ":", with: "_")  // Optional: handles colon in URLs
-            .replacingOccurrences(of: ".", with: "_")  // Optional: handles dot
-    }
-    
+  
 }

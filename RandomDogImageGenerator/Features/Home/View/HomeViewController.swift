@@ -22,22 +22,15 @@ class HomeViewController: UIViewController {
     }
     
     private func setupUI() {
-        // Setup button and label properties
         titleLabel.text = "Random Dog Image Generator"
         generateButton.setTitle("Generate Dogs!", for: .normal)
         recentButton.setTitle("My Recently Generated Dogs!", for: .normal)
-        
-        // Set background color
+        generateButton.setBlackBorder()
+        recentButton.setBlackBorder()
         generateButton.backgroundColor = .customColour
         recentButton.backgroundColor = .customColour
-        
-        // Maintain capsule shape and fill color
-        generateButton.layer.cornerRadius = generateButton.frame.height / 2
-        recentButton.layer.cornerRadius = recentButton.frame.height / 2
-        
-        // Ensure the button has its color filled (not just border)
-        generateButton.layer.masksToBounds = true
-        recentButton.layer.masksToBounds = true
+        generateButton.setCurvedCorner()
+        recentButton.setCurvedCorner()
     }
 
 

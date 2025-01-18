@@ -51,6 +51,7 @@ class ImageCacheManager {
         imageCache.clearCache()
         persistance.clearAllImages()
         persistance.saveMetaData([])
+        print("Successfully Cleared Cache ✅")
     }
     
     
@@ -60,8 +61,5 @@ class ImageCacheManager {
             isMetaDataDirty = false
         }
     }
-    
-    private func sanitizeKey(_ key: String) -> String {
-        return key.replacingOccurrences(of: "/", with: "_")
-    }
+
 }
