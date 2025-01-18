@@ -34,7 +34,6 @@ class ImageGalleryViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        imageCollectionView?.frame = CGRect(x: 0, y: 200, width: view.frame.size.width, height: 270).integral //rounding to int
         clearButton.setCurvedCorner()
     }
     
@@ -46,10 +45,11 @@ class ImageGalleryViewController: UIViewController {
     private func setupCollectionView(){
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 300, height: 270)
+        layout.itemSize = CGSize(width: 250, height: 250)
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         imageCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         imageCollectionView?.showsHorizontalScrollIndicator = false
+        imageCollectionView?.translatesAutoresizingMaskIntoConstraints = false
         imageCollectionView?.delegate = self
         imageCollectionView?.dataSource = self
         
@@ -58,13 +58,20 @@ class ImageGalleryViewController: UIViewController {
             return
         }
         view.addSubview(myCollection)
+        NSLayoutConstraint.activate([
+            myCollection.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            myCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            myCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            myCollection.heightAnchor.constraint(equalToConstant: 250)
+        ])
+   
     }
 
     private func setupButton() {
         view.addSubview(clearButton)
         NSLayoutConstraint.activate([
             clearButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            clearButton.topAnchor.constraint(equalTo: imageCollectionView!.bottomAnchor, constant: 50),
+            clearButton.topAnchor.constraint(equalTo: imageCollectionView!.bottomAnchor, constant: 35),
             clearButton.heightAnchor.constraint(equalToConstant: 30),
             clearButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.3)
         ])

@@ -28,7 +28,7 @@ class GenerateImageViewController: UIViewController {
         generateButton.setTitle("Generate!", for: .normal)
         generateButton.backgroundColor = .customColour
         generateButton.setCurvedCorner()
-        generateButton.setCurvedCorner()
+        generateButton.setBlackBorder()
     }
     
     private func setupActivityIndicator() {

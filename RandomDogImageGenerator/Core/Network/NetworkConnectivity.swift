@@ -21,7 +21,6 @@ class NetworkConnectivity {
     private init(){
         queue = DispatchQueue(label: "NetworkMonitor")
         monitor.start(queue: queue)
-        monitor.start(queue: queue)
     }
     
     
