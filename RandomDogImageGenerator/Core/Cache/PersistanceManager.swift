@@ -13,14 +13,21 @@ class PersistanceManager {
     private let fileManager = FileManager.default
     private let cacheDirectory: URL
     private let metadataURL: URL
+    private let ioQueue = DispatchQueue(label: "com.imagecachemanager.ioQueue", attributes: .concurrent)
+    
     
     init() {
         let cacheDirectoryURLs = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first!
         cacheDirectory = cacheDirectoryURLs.appendingPathComponent("ImageCache")
         metadataURL = cacheDirectoryURLs.appendingPathExtension("metadata.json")
-        
-        if fileManager.fileExists(atPath: cacheDirectory.path) {
-            try? fileManager.createDirectory(at: cacheDirectory, withIntermediateDirectories: true)
+        // Ensure the "ImageCache" directory exists
+        if !fileManager.fileExists(atPath: cacheDirectory.path) {
+            do {
+                try fileManager.createDirectory(at: cacheDirectory, withIntermediateDirectories: true, attributes: nil)
+                print("Cache directory created: \(cacheDirectory.path)")
+            } catch {
+                print("Error creating cache directory: \(error)")
+            }
         }
         
     }
@@ -41,15 +48,26 @@ class PersistanceManager {
     //save image to disk
     
     func saveImage(_ key: String, _ image: UIImage) {
-        guard let data = image.pngData() else { return }
-        let fileURL = cacheDirectory.appendingPathComponent("\(key).png")
-        try? data.write(to: fileURL)
+        let sanitizedKey = sanitizeKey(key)
+        ioQueue.async {
+            guard let data = image.jpegData(compressionQuality: 1.0) else {
+                print("Error: Image data is empty or invalid.")
+                return
+            }
+            let fileURL = self.cacheDirectory.appendingPathComponent(sanitizedKey)
+            do {
+                try data.write(to: fileURL)
+            } catch {
+                print("Error saving image to disk: \(error)")
+            }
+        }
     }
+    
     
     //load images from disk
     
     func loadImage(_ key: String) -> UIImage? {
-        let fileURL = cacheDirectory.appendingPathComponent("\(key).png")
+        let fileURL = cacheDirectory.appendingPathComponent(sanitizeKey(key))
         guard let data = try? Data(contentsOf: fileURL) else { return nil }
         return UIImage(data: data)
     }
@@ -57,9 +75,9 @@ class PersistanceManager {
     //clears single image
     
     func deleteImage(_ key: String) {
-           let fileURL = cacheDirectory.appendingPathComponent("\(key).png")
-           try? fileManager.removeItem(at: fileURL)
-       }
+        let fileURL = cacheDirectory.appendingPathComponent(sanitizeKey(key))
+        try? fileManager.removeItem(at: fileURL)
+    }
     
     //clear all images
     
@@ -67,5 +85,13 @@ class PersistanceManager {
         try? fileManager.removeItem(at: cacheDirectory)
         try? fileManager.createDirectory(at: cacheDirectory, withIntermediateDirectories: true)
     }
-  
+    
+    private func sanitizeKey(_ key: String) -> String {
+        // Replace slashes and other unsafe characters with underscores
+        return key
+            .replacingOccurrences(of: "/", with: "_")
+            .replacingOccurrences(of: ":", with: "_")  // Optional: handles colon in URLs
+            .replacingOccurrences(of: ".", with: "_")  // Optional: handles dot
+    }
+    
 }

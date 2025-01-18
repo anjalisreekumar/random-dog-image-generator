@@ -13,7 +13,6 @@ class DogImageService {
     let imageHandler = ImageCacheManager.shared
     
     func fetchRandomDogImage(completion: @escaping (Result<UIImage, NetworkError>) -> Void) {
-        
         guard NetworkConnectivity.shared.isConnected else {
             completion(.failure(.noInternetConnection))
             return
@@ -31,41 +30,36 @@ class DogImageService {
             }
         }
         
-        
     }
     
-       private func downloadImage(from urlString: String, completion: @escaping (Result<UIImage, NetworkError>) -> Void) {
-           
-           if let cachedImage = imageHandler.fetchImageFromCache(for: urlString) {
-               completion(.success(cachedImage))
-               return
-           }
-      
-           
-           guard let url = URL(string: urlString) else {
-               completion(.failure(.invalidURL))
-               return
-           }
-           
-           let task = URLSession.shared.dataTask(with: url) { data, response, error in
-               if let _ = error {
-                   completion(.failure(.requestFailed))
-                   return
-               }
-               
-               guard let data = data, let image = UIImage(data: data) else {
-                   completion(.failure(.decodingFailed))
-                   return
-               }
-               
-             let message = self.imageHandler.saveImageToCache(image, for: urlString)
-               print("Image status is \(String(describing: message))")
-               
-               completion(.success(image))
-           }
-           
-           task.resume()
-       }
+    private func downloadImage(from urlString: String, completion: @escaping (Result<UIImage, NetworkError>) -> Void) {
+        
+        if let cachedImage = imageHandler.getImage(urlString) {
+            completion(.success(cachedImage))
+            return
+        }
+        
+        guard let url = URL(string: urlString) else {
+            completion(.failure(.invalidURL))
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            if let _ = error {
+                completion(.failure(.requestFailed))
+                return
+            }
+            
+            guard let data = data, let image = UIImage(data: data) else {
+                completion(.failure(.decodingFailed))
+                return
+            }
+            self.imageHandler.addImage(urlString, image)
+            completion(.success(image))
+        }
+        
+        task.resume()
+    }
     
     
 }

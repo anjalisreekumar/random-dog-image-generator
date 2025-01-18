@@ -47,7 +47,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
         
         print("App entered background")
-        ImageCacheManager.shared.saveAllCacheToDisk()
 
     }
 

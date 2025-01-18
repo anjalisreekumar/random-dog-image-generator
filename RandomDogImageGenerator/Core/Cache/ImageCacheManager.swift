@@ -10,87 +10,54 @@ import UIKit
 class ImageCacheManager {
     static let shared = ImageCacheManager()
     
-    private let imageCache = LRUCache(capacity: 6)
-    private let cacheDirectory: URL
+    let imageCache: LRUCache
+    private let persistance = PersistanceManager()
+    private var isMetaDataDirty = false
     
     private init() {
-        cacheDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        do {
-            try FileManager.default.createDirectory(at: cacheDirectory, withIntermediateDirectories: true, attributes: nil)
-        } catch {
-            fatalError("Could not create file")
+        imageCache = LRUCache(capacity: 20)
+        imageCache.onEviction = {[weak self] evictedKey in
+            self?.persistance.deleteImage(evictedKey)
+            self?.isMetaDataDirty = true
         }
-        loadCacheFromDisk()
+        loadCacheState()
     }
     
-    private func loadCacheFromDisk() {
-        let fileManager = FileManager.default
-        
-        do {
-            let fileUrls = try fileManager.contentsOfDirectory(at: cacheDirectory, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
-            for fileUrl in fileUrls {
-                if let imageData = try? Data(contentsOf: fileUrl),
-                   let image = UIImage(data: imageData) {
-                    let key = fileUrl.lastPathComponent
-                    imageCache.put(key: key, value: image)
-                }
+    private func loadCacheState() {
+        let keys = persistance.loadMetaData()
+        let reversedKeys = keys?.reversed() ?? []
+
+        reversedKeys.forEach({ key in
+            if let image = persistance.loadImage(key) {
+                imageCache.put(key: key, value: image)
             }
-        } catch {
-            print("Error loading cache from disk: \(error)")
-        }
+        })
     }
     
-    private func saveImageToDisk(_ image: UIImage, for key: String) {
-        guard let imageData = image.pngData() else { return }
-        let fileURL = cacheDirectory.appendingPathComponent(sanitizeKey(key))
+    func addImage(_ key: String, _ image: UIImage) {
+        imageCache.put(key: key, value: image)
+        persistance.saveImage(key, image)
+        persistCache()
+        isMetaDataDirty = true
         
-        do {
-            try imageData.write(to: fileURL)
-        } catch {
-            print("Error saving image to disk: \(error)")
-        }
     }
     
-    func saveImageToCache(_ image: UIImage, for key: String) -> String {
-        if let _ = imageCache.get(key: key) {
-            return "Image already exists. Not saved."
-        } else {
-            imageCache.put(key: key, value: image)
-            saveImageToDisk(image, for: key) // Save to disk
-            return "Image saved successfully."
-        }
+    func getImage(_ key: String) -> UIImage? {
+        return imageCache.get(key: key) ?? persistance.loadImage(key)
     }
     
-    func fetchImageFromCache(for key: String) -> UIImage? {
-        return imageCache.get(key: key)
-    }
-    
-    func fetchAllImagesFromCache() -> [UIImage] {
-        return imageCache.getAllImages()
-    }
     
     func clearCache() {
         imageCache.clearCache()
-        clearAllCacheFromDisk()
+        persistance.clearAllImages()
+        persistance.saveMetaData([])
     }
     
-    private func clearAllCacheFromDisk() {
-        let fileManager = FileManager.default
-        do {
-            let fileUrls = try fileManager.contentsOfDirectory(at: cacheDirectory, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
-            for fileUrl in fileUrls {
-                try fileManager.removeItem(at: fileUrl)
-            }
-        } catch {
-            print("Error clearing cache from disk: \(error)")
-        }
-    }
     
-    func saveAllCacheToDisk() {
-        for key in imageCache.cache.keys {
-            if let image = imageCache.get(key: key) {
-                saveImageToDisk(image, for: key)
-            }
+    func persistCache() {
+        if isMetaDataDirty {
+            persistance.saveMetaData(imageCache.getAllKeys())
+            isMetaDataDirty = false
         }
     }
     

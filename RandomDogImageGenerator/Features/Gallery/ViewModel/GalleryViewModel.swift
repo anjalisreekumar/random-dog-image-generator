@@ -21,7 +21,7 @@ class GalleryViewModel {
     }
     
     func loadImages() {
-        let images = imageHandler.fetchAllImagesFromCache()
+        let images = imageHandler.imageCache.getAllImages()
         imageArray = images
         onImageDataUpdate?()
     }

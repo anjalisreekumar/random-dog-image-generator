@@ -13,7 +13,7 @@ class ImageGalleryViewController: UIViewController {
       let button = UIButton()
         button.setTitle("Clear", for: .normal)
         button.backgroundColor = .customColour
-        button.layer.cornerRadius = 50 / 2
+        button.layer.cornerRadius = 30 / 2
         button.clipsToBounds = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
