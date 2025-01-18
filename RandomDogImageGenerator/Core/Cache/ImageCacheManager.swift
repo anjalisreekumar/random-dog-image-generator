@@ -44,6 +44,7 @@ class ImageCacheManager {
         }
         
     }
+
     
     private func saveImageToDisk(_ image: UIImage, for key: String) {
         guard let imageData = image.pngData() else {
@@ -60,7 +61,6 @@ class ImageCacheManager {
         }
     }
     
-    // Save image to cache
     func saveImageToCache(_ image: UIImage, for key: String) -> String {
         if let _ = imageCache.get(key: key) {
             return "Image already exists. Not saved."
@@ -74,11 +74,9 @@ class ImageCacheManager {
         return imageCache.get(key: key)
     }
     
-    // Fetch all images from cache
     func fetchAllImagesFromCache() -> [UIImage] {
         var images = [UIImage]()
         
-        // Get all images from the cache
         for key in imageCache.cache.keys {
             if let image = imageCache.get(key: key) {
                 images.append(image)
@@ -88,8 +86,49 @@ class ImageCacheManager {
         return images
     }
     
-    // Clear cache
     func clearCache() {
         imageCache.clearCache()
+        clearAllCacheFromDisk()
+        
     }
+    func clearAllCacheFromDisk() {
+        let fileManager = FileManager.default
+        do {
+            let fileUrls = try fileManager.contentsOfDirectory(at: cacheDirectory, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
+            
+            for fileUrl in fileUrls {
+                try fileManager.removeItem(at: fileUrl)
+                print("Deleted file: \(fileUrl)")
+            }
+        }
+        catch {
+            print("Error clearing cache from disk: \(error)")
+        }
+    }
+    
+    func saveAllCacheToDisk() {
+        for key in imageCache.cache.keys {
+            if let image = imageCache.get(key: key) {
+                guard let imageData = image.pngData() else {return}
+                let filePath = cacheDirectory.appendingPathComponent(sanitizeKey(key))
+                
+                
+                do {
+                    try imageData.write(to: filePath)
+                    print("Successfully saved image for key: \(key)")
+
+                }
+                catch {
+                    print("Error saving image for key: \(key). Error: \(error)")
+
+                    
+                }
+            }
+        }
+    }
+    func sanitizeKey(_ key: String) -> String {
+        return key.replacingOccurrences(of: "/", with: "_")
+    }
+
+    
 }

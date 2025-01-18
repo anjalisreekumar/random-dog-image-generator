@@ -20,42 +20,24 @@ class ImageGalleryViewController: UIViewController {
     }()
     
     private var imageCollectionView: UICollectionView?
+ 
+    private let viewModel = GalleryViewModel()
     
-    let imageNames = [
-        "house",
-        "person.circle",
-        "star",
-        "bell",
-        "heart",
-        "envelope",
-        "gear",
-        "magnifyingglass",
-        "trash",
-        "bookmark",
-        "flag",
-        "paperplane",
-        "cloud",
-        "calendar",
-        "cart",
-        "camera",
-        "folder",
-        "link",
-        "pencil",
-        "lock"
-    ]
-
+    let imageHandler = ImageCacheManager.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupCollectionView()
         setupButton()
+        setupBindings()
         
+      print(imageHandler.fetchAllImagesFromCache())
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        imageCollectionView?.frame = CGRect(x: 0, y: 200, width: view.frame.size.width, height: 300).integral//rounding to int
+        imageCollectionView?.frame = CGRect(x: 0, y: 200, width: view.frame.size.width, height: 300).integral //rounding to int
     }
     
     private func setupCollectionView(){
@@ -83,20 +65,35 @@ class ImageGalleryViewController: UIViewController {
             clearButton.heightAnchor.constraint(equalToConstant: 30),
             clearButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.3)
         ])
+        
+        clearButton.addTarget(self, action: #selector(didTapClear), for: .touchUpInside)
+    }
+    
+    
+    @objc private func didTapClear(){
+        viewModel.clearAllImages()
+    }
+    
+    private func setupBindings(){
+        viewModel.onClearButtonTapped = { [weak self] in
+            self?.imageCollectionView?.reloadData()
+
+        }
     }
 }
 
 
 
 
+
 extension ImageGalleryViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        imageNames.count
+        viewModel.imageNames.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageGalleryCollectionViewCell.identifier, for: indexPath) as! ImageGalleryCollectionViewCell
-        cell.configure(with: imageNames[indexPath.row])
+        cell.configure(with: viewModel.imageNames[indexPath.row])
         return cell
     }
     

@@ -10,7 +10,7 @@ class LRUCache {
     init(capacity: Int) {
         self.capacity = capacity
     }
-
+    
     func moveNodeToFront(_ node: Node) {
         if node === head { return }
         removeNode(node)
@@ -26,7 +26,7 @@ class LRUCache {
             tail = node
         }
     }
-
+    
     func removeNode(_ node: Node) {
         if let prev = node.previous {
             prev.next = node.next
@@ -40,7 +40,7 @@ class LRUCache {
             tail = node.previous
         }
     }
-
+    
     func put(key: String, value: UIImage) {
         if let node = cache[key] {
             // If the node exists, update its value and move it to the front
@@ -61,18 +61,22 @@ class LRUCache {
             moveNodeToFront(newNode)
         }
     }
-
+    
     // Retrieve a node from the cache and move it to the front (most recently used)
     func get(key: String) -> UIImage? {
         guard let node = cache[key] else { return nil }
         moveNodeToFront(node)
         return node.value
     }
-
+    
     // Clear the cache
     func clearCache() {
         cache.removeAll()
         head = nil
         tail = nil
+    }
+    
+    func getAllImages() -> [UIImage] {
+        return cache.values.map { $0.value }
     }
 }
