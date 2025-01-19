@@ -42,10 +42,15 @@ class ImageGalleryViewController: UIViewController {
         clearButton.setBlackBorder()
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        imageCollectionView?.collectionViewLayout.invalidateLayout()
+    }
+
     private func setupCollectionView(){
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 250, height: 250)
+//        layout.itemSize = CGSize(width: 250, height: 250)
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         imageCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         imageCollectionView?.showsHorizontalScrollIndicator = false
@@ -59,11 +64,11 @@ class ImageGalleryViewController: UIViewController {
         }
         view.addSubview(myCollection)
         NSLayoutConstraint.activate([
-            myCollection.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            myCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            myCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            myCollection.heightAnchor.constraint(equalToConstant: 250)
-        ])
+                myCollection.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+                myCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                myCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                myCollection.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.5)
+            ])
    
     }
 
@@ -102,4 +107,14 @@ extension ImageGalleryViewController: UICollectionViewDataSource, UICollectionVi
         return cell
     }
     
+}
+
+extension ImageGalleryViewController : UICollectionViewDelegateFlowLayout{
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let height = collectionView.bounds.height * 0.8
+        let width: CGFloat = collectionView.bounds.height * 0.8
+
+        return CGSize(width: width, height: height)
+    }
+
 }
