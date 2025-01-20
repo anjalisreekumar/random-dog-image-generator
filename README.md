@@ -56,3 +56,13 @@ The app follows the MVVM (Model-View-ViewModel) architecture for clear separatio
 ## Future Improvements
 
 - Unit testing
+
+## ScreenShots
+![Simulator Screenshot - iPhone 16 - 2025-01-20 at 09 27 43](https://github.com/user-attachments/assets/30ee3da9-c5a3-4e87-95b6-4f671f8ff57f)
+
+![Simulator Screenshot - iPhone 16 - 2025-01-20 at 09 27 53](https://github.com/user-attachments/assets/8cb1458a-fdf5-49dd-8431-d1b6aa62c1e6)
+
+![Simulator Screenshot - iPhone 16 - 2025-01-20 at 09 28 14](https://github.com/user-attachments/assets/9874486e-9379-423a-80cf-d70e14051b20)
+
+
+
